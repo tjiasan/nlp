@@ -3,7 +3,8 @@ module.exports = () => {
     const wordnet = require('wordnet');
     const nlp_toolkit = require('nlp-toolkit');
     const Promise = require('bluebird');
-
+  //const wd = require("word-definition");
+  
     const NLP_Classifier = { 
         GetSynsetType: (word) => {
             return new Promise((resolve, reject) => {
