@@ -28,15 +28,15 @@ module.exports = () => {
                     else {
                         types_enum [type] = 1;
                     }
-                })
-            })
+                });
+            });
 
             Object.keys(types_enum).forEach(type => {
                 if (types_enum[type] == word_types.length){
                     return type;
                 }
             })
-
+            ;
             return false;
 
         },
@@ -65,11 +65,10 @@ module.exports = () => {
                         if(!commonality){
                             throw new Error ('No common word types');
                         } 
-                        return NLP_Classifier.CreatePreliminaryMap(sentences, commonality)
-
+                        return NLP_Classifier.CreatePreliminaryModel(sentences, commonality);
                     })
                     .then(first_network => {
-                        return NLP_Classifier.BuildModel(first_network)
+                        return NLP_Classifier.BuildModel(first_network);
                     })                
     
         }
