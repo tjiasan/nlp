@@ -49,21 +49,29 @@ module.exports = () => {
          * @return  {obj}                           - A promise of an Office object
          */
         CreateModel: (word_list, sentences) =>{
-            let Words_Network = { };
 
             let type_promises = [];
 
             word_list.forEach((word) => {
+                word = nlp_toolkit.stemmer(word)
                 type_promises.push(NLP_Classifier.GetSynsetType(word));
             })
 
             return Promise.all(type_promises)
                     .then((types) => {
-                        
+                        return NLP_Classifier.CheckCommonTypes(types);
                     })
+                    .then((commonality) => {
+                        if(!commonality){
+                            throw new Error ('No common word types');
+                        } 
+                        return NLP_Classifier.CreatePreliminaryMap(sentences, commonality)
 
-        
-
+                    })
+                    .then(first_network => {
+                        return NLP_Classifier.BuildModel(first_network)
+                    })                
+    
         }
 
 
