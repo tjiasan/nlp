@@ -103,12 +103,15 @@ module.exports = () => {
             //create reverse keys;
             let Reverse = { };
 
-            Object.keys(Network).forEach(key => {
-                
+            Object.keys(Network).forEach(val => {
+                Object.keys(Network[val]).forEach(word => {
+                    if (!Reverse[word]){
+                        Reverse[word] = {}
+                    }
+                    
+                    reverse[word][val] = 1;
+                })
             })
-
-
-
 
         },
 
