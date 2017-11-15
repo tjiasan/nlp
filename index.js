@@ -41,6 +41,77 @@ module.exports = () => {
 
         },
 
+        CreateNetwork: (sentences, commonality) => {
+            let linker;
+            let Network = { };
+            if (commonality == 'noun' ){
+                linker = 'adjective';
+            } else if (commonality == 'adjective') {
+               linker = 'noun';
+           } else {
+                throw new Error ('No linkable commonalities');
+           }
+           
+           return Promise.resolve()
+                // create network
+                .then(() => {
+
+                    return Promise.map(sentences, (sentence) => {
+
+                        let tokenized_sentence = nlp_toolkit.tokenizer(sentence);  
+                        let links = [];
+                        let stems = [];
+
+                        return Promise.map(tokenized_sentence, (word) => {
+                            return NLP_Classifier.GetSynsetType(word)
+                            .then((types) => {
+                                types.forEach(type => {
+                                    if (type == linker){
+                                        links.push(word)
+                                    } else if (type == commonality){
+                                        stems.push(word);
+                                    }
+                                });
+                            })
+                        })
+                        .then(()=> {
+                            links.forEach(link => { 
+                                if (!Network[link]){
+                                    Network[link] = {}
+                                }
+                                
+                                stems.forEach(stem => { 
+                                    if (!Network[link][stem]){
+                                        Network[link][stem] = 1;
+                                    }
+                                    else {
+                                        Network[link][stem] ++;
+                                    }
+                                })
+
+                            })
+                        })
+                    })
+                  
+                }).then(() => {
+                    return Network;
+                })
+
+        },
+
+        BuildModel: (Network) => {
+            //create reverse keys;
+            let Reverse = { };
+
+            Object.keys(Network).forEach(key => {
+                
+            })
+
+
+
+
+        },
+
         /**
          * Create a 1-D Model to Strattify Words
          *
@@ -65,10 +136,10 @@ module.exports = () => {
                         if(!commonality){
                             throw new Error ('No common word types');
                         } 
-                        return NLP_Classifier.CreatePreliminaryModel(sentences, commonality);
+                        return NLP_Classifier.CreateNetwork(sentences, commonality);
                     })
-                    .then(first_network => {
-                        return NLP_Classifier.BuildModel(first_network);
+                    .then(Network => {
+                        return NLP_Classifier.BuildModel(Network);
                     })                
     
         }
