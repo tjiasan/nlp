@@ -99,19 +99,30 @@ module.exports = () => {
 
         },
 
-        BuildModel: (Network) => {
+        BuildModel: (Network, word_list, options) => {
             //create reverse keys;
-            let Reverse = { };
+            let Reverse = { };         
+            let Model = { };
+            Model.word_list[0] = 1;
+            Model.word_list[1] = 0;
 
             Object.keys(Network).forEach(val => {
                 Object.keys(Network[val]).forEach(word => {
                     if (!Reverse[word]){
                         Reverse[word] = {}
                     }
-                    
+                    Model[word] = 0.5;                    
                     reverse[word][val] = 1;
                 })
             })
+   
+            let iterations = Options.iterations;
+
+            for (let i = 0; i < iterations; i++){
+                
+
+            }
+            
 
         },
 
@@ -142,7 +153,7 @@ module.exports = () => {
                         return NLP_Classifier.CreateNetwork(sentences, commonality);
                     })
                     .then(Network => {
-                        return NLP_Classifier.BuildModel(Network);
+                        return NLP_Classifier.BuildModel(Network, word_list, options);
                     })                
     
         }
