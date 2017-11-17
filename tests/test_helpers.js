@@ -26,6 +26,12 @@ let Fixtures = {
             { 'noun': 1 },
             { 'adjective': 1 }
         ],
+    },
+    BuildModel: {
+        Network: {
+            "chocolate": { "happy" :2 ,  "amazing" : 3, "great" :1, "nice": 5 },
+            "devil" : {"bad": 3, "evil": 5 , "nice": 1 }
+        }
     }
 }
 
@@ -103,22 +109,34 @@ describe('Create Network', function() {
     
     it ('>.CreateNetwork should create networks properly' , (done) => {
         Helpers.CreateNetwork(sentences, 'adjective')
-            .then(res => {
-                console.log(res)
+            .then(network => {
+                network.chocolate.happy.should.equal(2);
+                network.chocolate.amazing.should.equal(1);
+                Object.keys(network).forEach(key => {
+                    Object.keys(network[key]).length.should.be.above(0)
+                })
                 done()
-            })
-            .catch(e => {
-                console.log(e)
-                done()
-            })
-      
- 
-      
+            })     
      })
-
-
-
     after ((done) => {
         done();
     })
 })
+
+describe('Build Model', function() {
+    before ((done) => {
+        done();
+    })
+    
+    it ('>.Build Model should work' , (done) => {
+        let Options = { iterations: 2};
+        let Model = Helpers.BuildModel(Fixtures.BuildModel.Network, ['happy', 'bad'], Options)
+        console.log(Model)
+        done()
+     })
+    after ((done) => {
+        done();
+    })
+})
+
+
