@@ -103,15 +103,17 @@ module.exports = () => {
             //create reverse keys;
             let Reverse = { };         
             let Model = { };
-            Model.word_list[0] = 1;
-            Model.word_list[1] = 0;
+            let positive_iterators = [word_list[0]];
+            let negative_iterators = [word_list[1]];
+            Model.word_list[0] = { score: 1 };
+            Model.word_list[1] = { score: 0 };
 
             Object.keys(Network).forEach(val => {
                 Object.keys(Network[val]).forEach(word => {
                     if (!Reverse[word]){
                         Reverse[word] = {}
                     }
-                    Model[word] = 0.5;                    
+                    Model[word] = { score: 0.5 };                    
                     reverse[word][val] = 1;
                 })
             })
@@ -119,8 +121,13 @@ module.exports = () => {
             let iterations = Options.iterations;
 
             for (let i = 0; i < iterations; i++){
+                let tmp_pos = { };
+                let tmp_neg = { };
+
                 
 
+                positive_iterators = Object.keys(tmp_pos);
+                negative_iterators = Object.keys(tmp_neg);
             }
             
 
