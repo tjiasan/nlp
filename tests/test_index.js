@@ -15,7 +15,6 @@ describe('CreateModel should return a model', function() {
         done();
     });
 
-   
     it ('>.CreateModel it should create a model', (done) => {
        NLPClassifier.CreateModel(['happy', 'bad'], sentences)
         .then((model) => {
