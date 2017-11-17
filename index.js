@@ -166,6 +166,8 @@ module.exports = () => {
                 positive_iterators = Object.keys(tmp_pos);
                 negative_iterators = Object.keys(tmp_neg);
             }
+
+            return Model;
             
 
         },
