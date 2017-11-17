@@ -3,10 +3,10 @@ module.exports = () => {
     const nlp_toolkit = require('nlp-toolkit');
 
     const Helpers = {
-        GetSynsetType: (word) => {
+        GetSynsetType : (word) => {
             return new Promise((resolve, reject) => {
                 let results = {};
-                wordnet.lookup(word, (err,definitions) => {
+                wordnet.lookup(word, (err, definitions) => {
                     definitions.forEach(def => {
                         results[def.meta.synsetType] = 1;
                     });
@@ -16,7 +16,7 @@ module.exports = () => {
         },
     
         CheckCommonTypes : (word_types) => {
-            let types_enum = { }
+            let types_enum = { };
             word_types.forEach(types => {
                 Object.keys(types).forEach(type => {
                     if (types_enum [type]){
@@ -38,7 +38,7 @@ module.exports = () => {
     
         },
     
-        CreateNetwork: (sentences, commonality) => {
+        CreateNetwork : (sentences, commonality) => {
             let linker;
             let Network = { };
             if (commonality == 'noun' ){
@@ -64,17 +64,17 @@ module.exports = () => {
                             .then((types) => {
                                 types.forEach(type => {
                                     if (type == linker){
-                                        links.push(word)
+                                        links.push(word);
                                     } else if (type == commonality){
                                         stems.push(word);
                                     }
                                 });
-                            })
+                            });
                         })
                         .then(()=> {
                             links.forEach(link => { 
                                 if (!Network[link]){
-                                    Network[link] = {}
+                                    Network[link] = {};
                                 }
                                 
                                 stems.forEach(stem => { 
@@ -84,19 +84,19 @@ module.exports = () => {
                                     else {
                                         Network[link][stem] ++;
                                     }
-                                })
+                                });
     
-                            })
-                        })
-                    })
+                            });
+                        });
+                    });
                   
                 }).then(() => {
                     return Network;
-                })
+                });
     
         },
     
-        BuildModel: (Network, word_list, options) => {
+        BuildModel : (Network, word_list, options) => {
             //create reverse keys;
             let Reverse = { };         
             let Model = { };
@@ -108,19 +108,19 @@ module.exports = () => {
             Object.keys(Network).forEach(val => {
                 Object.keys(Network[val]).forEach(word => {
                     if (!Reverse[word]){
-                        Reverse[word] = {}
+                        Reverse[word] = {};
                     }
                     Model[word] = { score: 0.5 };                    
                     reverse[word][val] = 1;
-                })
-            })
+                });
+            });
     
             let iterations = Options.iterations;
     
             for (let i = 0; i < iterations; i++){
                 let tmp_pos = { };
                 let tmp_neg = { };
-                let strength = 1/i;
+                let strength = 1 / i;
     
                 positive_iterators.forEach(positive => { 
                     let process_list = Object.keys(reverse[positive]);
@@ -131,14 +131,14 @@ module.exports = () => {
                         stems.forEach(stem => {
                             tmp_pos[stem] = 1;
                             if (!Model[stem][pos]) {
-                                Model[stem][pos] = strength*Network[list][stem]
+                                Model[stem][pos] = strength * Network[list][stem];
                             } 
                             else { 
-                                Model[stem][pos] += strength*Network[list][stem]
+                                Model[stem][pos] += strength * Network[list][stem];
                             }
-                        })
-                    })
-                })
+                        });
+                    });
+                });
     
                 //do the same for negative iterators
                 negative_iterators.forEach(negative=> { 
@@ -150,14 +150,14 @@ module.exports = () => {
                         stems.forEach(stem => {
                             tmp_pos[neg] = 1;
                             if (!Model[stem][pos]) {
-                                Model[stem][pos] = strength*Network[list][stem]
+                                Model[stem][pos] = strength * Network[list][stem];
                             } 
                             else { 
-                                Model[stem][pos] += strength*Network[list][stem]
+                                Model[stem][pos] += strength * Network[list][stem];
                             }
-                        })
-                    })
-                })
+                        });
+                    });
+                });
     
     
                 positive_iterators = Object.keys(tmp_pos);
@@ -169,9 +169,9 @@ module.exports = () => {
     
         }
     
-    }
+    };
     
     return Helpers;
 
 
-}
+};
