@@ -9,8 +9,8 @@
         "node": ">=0.10.25"
     },
     "devDependencies": {
-        "eslint-plugin-react": "^7.4.0",
         "babel-eslint": "8.0.2",
+        "eslint-plugin-react": "^7.4.0",
         "gulp": "^3.9.1",
         "gulp-eslint": "^2.0.0",
         "gulp-istanbul": "^0.10.3",

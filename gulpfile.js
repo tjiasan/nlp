@@ -70,10 +70,9 @@ Gulp.task('default', function() {
 (() => {
      Gulp.task('eslint:fix', function () {
         return Gulp.src([
-            './app.js',
-            './gulpfile.js',
-            './routes/**/*.js',
-            './src/*.js'
+            './index.js',
+            './tests/*.js',
+            './utils/*.js'
         ])
         // Covering files
             .pipe(ESLint({ fix: true }))
@@ -93,10 +92,9 @@ Gulp.task('default', function() {
 
     Gulp.task('eslint', function () {
         return Gulp.src([
-            './app.js',
-            './gulpfile.js',
-            './routes/**/*.js',
-            './src/*.js'
+            './index.js',
+            './tests/*.js',
+            './utils/*.js'
         ])
             // Covering files
             .pipe(ESLint({  }))

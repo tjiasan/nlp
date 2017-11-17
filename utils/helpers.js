@@ -108,73 +108,120 @@ module.exports = () => {
     
         },
     
-        BuildModel : (Network, word_list, options) => {
+        BuildModel : (Network, word_list, Options) => {
+            let iterations = Options.iterations;
+            let loop_limit = Options.iteration_limit;
             //create reverse keys;
             let Reverse = { };         
             let Model = { };
+            let Limit  = { };
             let positive_iterators = [word_list[0]];
             let negative_iterators = [word_list[1]];
-            Model.word_list[0] = { score: 1 };
-            Model.word_list[1] = { score: 0 };
+            Model[word_list[0]] = { score: 1 };
+            Model[word_list[1]] = { score: 0 };
     
             Object.keys(Network).forEach(val => {
                 Object.keys(Network[val]).forEach(word => {
                     if (!Reverse[word]){
                         Reverse[word] = {};
                     }
-                    Model[word] = { score: 0.5 };                    
-                    reverse[word][val] = 1;
+                    if (word_list.indexOf(word) == -1) {
+                        Model[word] = { score: 0.5 };    
+                    }                     
+                    Reverse[word][val] = 1;
                 });
-            });
-    
-            let iterations = Options.iterations;
+            });      
+
     
             for (let i = 0; i < iterations; i++){
                 let tmp_pos = { };
                 let tmp_neg = { };
-                let strength = 1 / i;
+                let tmp_limit = { };
+                //modify for functions
+                let strength = 1 / (Math.log(i + 1) + 1 );
     
                 positive_iterators.forEach(positive => { 
-                    let process_list = Object.keys(reverse[positive]);
+                    let process_list = Object.keys(Reverse[positive]);
                     
                     process_list.forEach(list => {
                         let stems = Object.keys(Network[list]);
-                        
+                        tmp_limit[list] = 1;
+                        let cont = true;
+                        if (loop_limit && Limit[list] && Limit[list] > loop_limit) {
+                            cont = false;
+                        }
+
+                        if (cont) {
                         stems.forEach(stem => {
                             tmp_pos[stem] = 1;
-                            if (!Model[stem][pos]) {
-                                Model[stem][pos] = strength * Network[list][stem];
+                            if (!Model[stem]['pos']) {
+                                Model[stem]['pos'] = strength * Network[list][stem];
                             } 
                             else { 
-                                Model[stem][pos] += strength * Network[list][stem];
+                                Model[stem]['pos'] += strength * Network[list][stem];
                             }
                         });
+                       }
                     });
                 });
     
                 //do the same for negative iterators
                 negative_iterators.forEach(negative=> { 
-                    let process_list = Object.keys(reverse[negative]);
+                    let process_list = Object.keys(Reverse[negative]);
                     
                     process_list.forEach(list => {
                         let stems = Object.keys(Network[list]);
-                        
-                        stems.forEach(stem => {
-                            tmp_pos[neg] = 1;
-                            if (!Model[stem][pos]) {
-                                Model[stem][pos] = strength * Network[list][stem];
-                            } 
-                            else { 
-                                Model[stem][pos] += strength * Network[list][stem];
-                            }
-                        });
+                        tmp_limit[list] = 1;
+                        let cont = true;
+                        if (loop_limit && Limit[list] && Limit[list] > loop_limit) {
+                            cont = false;
+                        }
+
+                        if (cont) {
+                            stems.forEach(stem => {
+                                tmp_neg[stem] = 1;
+                                if (!Model[stem]['neg']) {
+                                    Model[stem]['neg'] = strength * Network[list][stem];
+                                } 
+                                else { 
+                                    Model[stem]['neg'] += strength * Network[list][stem];
+                                }
+                            });
+
+                        }
                     });
                 });
-    
-    
+                
+                Object.keys(tmp_limit).forEach(list => {
+                    if (Limit[list]){
+                        Limit[list] ++;
+                    } else {
+                        Limit[list] = 1;
+                    }
+                 
+                });
+                
                 positive_iterators = Object.keys(tmp_pos);
                 negative_iterators = Object.keys(tmp_neg);
             }
+            Object.keys(Model).forEach(word => {
+                if (word_list.indexOf(word) == -1){
+                    if (Model[word].pos && Model[word].neg){
+                        Model[word].score = Model[word].pos / (Model[word].pos + Model[word].neg);
+                        Model[word].score = Model[word].score.toFixed(5);
+                    }
+                    else if (Model[word].pos){
+                        Model[word].score = 1;
+                    }  
+                    else if (Model[word].neg){
+                        Model[word].score = 0;
+                    }    
+
+                }
+                delete Model[word].pos;
+                delete Model[word].neg;
+            });
+
     
             return Model;
             
