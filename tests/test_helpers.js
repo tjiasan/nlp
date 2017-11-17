@@ -37,7 +37,7 @@ describe('Synset Types', function() {
 
     it ('>. GetSynsetTypes should return all types as an object' , (done) => {
         Helpers.GetSynsetType('happy')
-            .then((res) => {
+            .then((res) => {      
                 (typeof res).should.be.an.Object;
                 Object.keys(res)[0].should.equal('adjective');
                 done();

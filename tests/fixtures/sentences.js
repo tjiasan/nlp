@@ -4,5 +4,7 @@ module.exports = [
     'The Devil is evil',
     'The Devil is bad',
     'The Devil is a liar',
-    'Chocolate is delicious'
+    'Chocolate is great',
+    'Chocolate is amazing',
+    'Chocolate makes me happy',
 ]
