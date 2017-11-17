@@ -2,12 +2,19 @@
     "private": true,
     "main": "index.js",
     "dependencies": {
-        "nlp-toolkit": "^0.2.6",
-        "should": "^13.1.3",
+        "nlp-toolkit": "^0.2.6",        
         "wordnet": "^0.1.2"
     },
     "engines": {
         "node": ">=0.10.25"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "should": "^13.1.3",
+        "gulp": "3.9.1",
+        "gulp-eslint": "^2.0.0",
+        "gulp-istanbul": "^0.10.3",
+        "gulp-mocha": "^2.2.0",
+        "gulp-shell": "^0.5.2",
+        "gulp-util": "^3.0.7"
+    }
 }

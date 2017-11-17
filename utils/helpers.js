@@ -1,15 +1,20 @@
 module.exports = () => {
+
     const wordnet = require('wordnet');
     const nlp_toolkit = require('nlp-toolkit');
+    const Promise = require('bluebird');
+
 
     const Helpers = {
         GetSynsetType : (word) => {
             return new Promise((resolve, reject) => {
                 let results = {};
                 wordnet.lookup(word, (err, definitions) => {
-                    definitions.forEach(def => {
-                        results[def.meta.synsetType] = 1;
-                    });
+                    if (definitions){
+                        definitions.forEach(def => {
+                            results[def.meta.synsetType] = 1;
+                        });                        
+                    }
                     resolve(results);
                 });
             });
@@ -45,48 +50,51 @@ module.exports = () => {
                 linker = 'adjective';
             } else if (commonality == 'adjective') {
                linker = 'noun';
-           } else {
+            } else {
                 throw new Error ('No linkable commonalities');
-           }
+            }
            
            return Promise.resolve()
                 // create network
-                .then(() => {
-    
+                .then(() => {    
                     return Promise.map(sentences, (sentence) => {
-    
+
                         let tokenized_sentence = nlp_toolkit.tokenizer(sentence);  
+        
                         let links = [];
                         let stems = [];
     
                         return Promise.map(tokenized_sentence, (word) => {
                             return Helpers.GetSynsetType(word)
-                            .then((types) => {
-                                types.forEach(type => {
-                                    if (type == linker){
-                                        links.push(word);
-                                    } else if (type == commonality){
-                                        stems.push(word);
-                                    }
-                                });
-                            });
-                        })
-                        .then(()=> {
-                            links.forEach(link => { 
-                                if (!Network[link]){
-                                    Network[link] = {};
-                                }
-                                
-                                stems.forEach(stem => { 
-                                    if (!Network[link][stem]){
-                                        Network[link][stem] = 1;
-                                    }
-                                    else {
-                                        Network[link][stem] ++;
-                                    }
-                                });
-    
-                            });
+                                .then((types) => {
+                                        if (types){
+                                            Object.keys(types).forEach(type => {
+                                                if (type == linker){
+                                                    links.push(word);
+                                                } else if (type == commonality){
+                                                    stems.push(word);
+                                                }
+                                            });
+                                        }     
+                                    });
+                                })
+                                .then(()=> {
+                                    links.forEach(link => {                            
+                                        stems.forEach(stem => { 
+                                            if (link != stem){
+                                                if (!Network[link]){
+                                                    Network[link] = {};
+                                                }  
+                                                if (!Network[link][stem]){
+                                                    Network[link][stem] = 1;
+                                                }
+                                                else {
+                                                    Network[link][stem] ++;
+                                                }
+                                             }
+                                        });
+            
+                                    });
                         });
                     });
                   

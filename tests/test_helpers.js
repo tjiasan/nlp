@@ -5,6 +5,7 @@
 // ----------------
 
 let should = require('should');
+let sentences = require('./fixtures/sentences');
 let Helpers = require ('../utils/helpers')();
 
 let Fixtures = {
@@ -89,6 +90,33 @@ describe('CheckCommonTypes', function() {
  
         done()
      })
+
+    after ((done) => {
+        done();
+    })
+})
+
+describe('Create Network', function() {
+    before ((done) => {
+        done();
+    })
+    
+    it ('>.CreateNetwork should create networks properly' , (done) => {
+        Helpers.CreateNetwork(sentences, 'adjective')
+            .then(res => {
+                console.log(res)
+                done()
+            })
+            .catch(e => {
+                console.log(e)
+                done()
+            })
+      
+ 
+      
+     })
+
+
 
     after ((done) => {
         done();

@@ -11,7 +11,7 @@ module.exports = {
          */
         CreateModel : (word_list, sentences) =>{
             const Promise = require('bluebird');
-            const Helpers = require('./utils/helpers');
+            const Helpers = require('./utils/helpers')();
             let type_promises = [];
             //const wd = require("word-definition");
 
