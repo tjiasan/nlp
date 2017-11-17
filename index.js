@@ -12,17 +12,18 @@ module.exports = {
         CreateModel : (word_list, sentences, options) =>{
             const Promise = require('bluebird');
             const Helpers = require('./utils/helpers')();
+            const nlp_toolkit = require('nlp-toolkit');
             let type_promises = [];
             
             if (!options) {
                 options = {
                     iterations: 50,
-                    iteration_limit: 3 
+                    iteration_limit: 3, 
                 }
             }
 
             word_list.forEach((word) => {
-                word = nlp_toolkit.stemmer(word);
+                word = nlp_toolkit.tokenizer(word)[0]
                 type_promises.push(Helpers.GetSynsetType(word));
             });
 
@@ -31,6 +32,10 @@ module.exports = {
                         return Helpers.CheckCommonTypes(types);
                     })
                     .then((commonality) => {
+                        if (options.commonality){
+                            commonality = options.toLowerCase();
+                        }
+
                         if (!commonality){
                             throw new Error ('No common word types');
                         } 

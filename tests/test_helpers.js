@@ -133,7 +133,11 @@ describe('Build Model', function() {
     it ('>.Build Model should work', (done) => {
         let Options = { iterations: 2, iteration_limit: 2 };
         let Model = Helpers.BuildModel(Fixtures.BuildModel.Network, ['happy', 'bad'], Options);
-        console.log(Model);
+      
+        Model.happy.score.should.equal(1);
+        Model.bad.score.should.equal(0);
+        Model.amazing.score.should.be.above(0.5);
+        Model.evil.score.should.be.below(0.5);
         done();
      });
     after ((done) => {
