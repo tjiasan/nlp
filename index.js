@@ -1,6 +1,4 @@
 module.exports = {  
-
-    NLPClassifier : { 
     
         /**
          * Create a 1-D Model to Strattify Words
@@ -47,6 +45,6 @@ module.exports = {
                     });                
     
         }
-    }
+    
 
 };

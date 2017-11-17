@@ -6,7 +6,7 @@
 
 let should = require('should');
 let sentences = require('./fixtures/sentences');
-let Index = require ('../index');
+let NLPClassifier = require ('../index');
 
 
 describe('CreateModel should return a model', function() {
@@ -17,7 +17,7 @@ describe('CreateModel should return a model', function() {
 
    
     it ('>.CreateModel it should create a model', (done) => {
-       Index.NLPClassifier.CreateModel(['happy', 'bad'], sentences)
+       NLPClassifier.CreateModel(['happy', 'bad'], sentences)
         .then((model) => {
             model.should.be.an.object;
             done();
