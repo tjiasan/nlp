@@ -12,6 +12,10 @@ module.exports = () => {
                 wordnet.lookup(word, (err, definitions) => {
                     if (definitions){
                         definitions.forEach(def => {
+                            if (def.meta.synsetType == 'adjective satellite'){
+                                def.meta.synsetType = 'adjective';
+                            }
+
                             results[def.meta.synsetType] = 1;
                         });                        
                     }
@@ -77,24 +81,24 @@ module.exports = () => {
                                             });
                                         }     
                                     });
-                                })
-                                .then(()=> {
-                                    links.forEach(link => {                            
-                                        stems.forEach(stem => { 
-                                            if (link != stem){
-                                                if (!Network[link]){
-                                                    Network[link] = {};
-                                                }  
-                                                if (!Network[link][stem]){
-                                                    Network[link][stem] = 1;
-                                                }
-                                                else {
-                                                    Network[link][stem] ++;
-                                                }
-                                             }
-                                        });
-            
+                            })                           
+                            .then(()=> {
+                                links.forEach(link => {                            
+                                    stems.forEach(stem => { 
+                                        if (link != stem){
+                                            if (!Network[link]){
+                                                Network[link] = {};
+                                            }  
+                                            if (!Network[link][stem]){
+                                                Network[link][stem] = 1;
+                                            }
+                                            else {
+                                                Network[link][stem] ++;
+                                            }
+                                            }
                                     });
+        
+                                });
                         });
                     });
                   
