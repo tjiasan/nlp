@@ -30,7 +30,8 @@ let Fixtures = {
     BuildModel: {
         Network: {
             "chocolate": { "happy" :2 ,  "amazing" : 3, "great" :1, "nice": 5 },
-            "devil" : {"bad": 3, "evil": 5 , "nice": 1 }
+            "devil" : {"bad": 3, "evil": 5 , "nice": 1 },
+            "cake": {"nice": 5, "amazing" :3 }
         }
     }
 }
@@ -129,7 +130,7 @@ describe('Build Model', function() {
     })
     
     it ('>.Build Model should work' , (done) => {
-        let Options = { iterations: 2};
+        let Options = { iterations: 50, iteration_limit: 2 };
         let Model = Helpers.BuildModel(Fixtures.BuildModel.Network, ['happy', 'bad'], Options)
         console.log(Model)
         done()
