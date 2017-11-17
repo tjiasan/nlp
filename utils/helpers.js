@@ -26,16 +26,16 @@ module.exports = () => {
                         types_enum [type] = 1;
                     }
                 });
-            });
-    
-            Object.keys(types_enum).forEach(type => {
+            });         
+       
+            let types = Object.keys(types_enum);
+            for (let i = 0; i < types.length; i ++){
+                let type = types[i];               
                 if (types_enum[type] == word_types.length){
                     return type;
                 }
-            })
-            ;
-            return false;
-    
+            }
+            return false;    
         },
     
         CreateNetwork : (sentences, commonality) => {
