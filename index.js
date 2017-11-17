@@ -9,11 +9,17 @@ module.exports = {
          * @param   {Array}       sentences         - An array of senteces to train the model, must contain word pairs
          * @return  {obj}                           - A promise of an Office object
          */
-        CreateModel : (word_list, sentences) =>{
+        CreateModel : (word_list, sentences, options) =>{
             const Promise = require('bluebird');
             const Helpers = require('./utils/helpers')();
             let type_promises = [];
-            //const wd = require("word-definition");
+            
+            if (!options) {
+                options = {
+                    iterations: 50,
+                    iteration_limit: 3 
+                }
+            }
 
             word_list.forEach((word) => {
                 word = nlp_toolkit.stemmer(word);
