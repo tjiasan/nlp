@@ -123,8 +123,45 @@ module.exports = () => {
             for (let i = 0; i < iterations; i++){
                 let tmp_pos = { };
                 let tmp_neg = { };
+                let strength = 1/i;
 
-                
+                positive_iterators.forEach(positive => { 
+                    let process_list = Object.keys(reverse[positive]);
+                    
+                    process_list.forEach(list => {
+                        let stems = Object.keys(Network[list]);
+                        
+                        stems.forEach(stem => {
+                            tmp_pos[stem] = 1;
+                            if (!Model[stem][pos]) {
+                                Model[stem][pos] = strength*Network[list][stem]
+                            } 
+                            else { 
+                                Model[stem][pos] += strength*Network[list][stem]
+                            }
+                        })
+                    })
+                })
+
+                //do the same for negative iterators
+                negative_iterators.forEach(negative=> { 
+                    let process_list = Object.keys(reverse[negative]);
+                    
+                    process_list.forEach(list => {
+                        let stems = Object.keys(Network[list]);
+                        
+                        stems.forEach(stem => {
+                            tmp_pos[neg] = 1;
+                            if (!Model[stem][pos]) {
+                                Model[stem][pos] = strength*Network[list][stem]
+                            } 
+                            else { 
+                                Model[stem][pos] += strength*Network[list][stem]
+                            }
+                        })
+                    })
+                })
+
 
                 positive_iterators = Object.keys(tmp_pos);
                 negative_iterators = Object.keys(tmp_neg);
