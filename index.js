@@ -7,6 +7,7 @@ module.exports = {
          *
          * @param   {Array}       word_list         - word pair that are opposites, must be the same lexical type
          * @param   {Array}       sentences         - An array of senteces to train the model, must contain word pairs
+         * @param   {obj}       options             - Model Creation Options
          * @return  {obj}                           - A promise of an Office object
          */
         CreateModel : (word_list, sentences, options) =>{
@@ -17,13 +18,13 @@ module.exports = {
             
             if (!options) {
                 options = {
-                    iterations: 50,
-                    iteration_limit: 3, 
-                }
+                    iterations      : 50,
+                    iteration_limit : 3 
+                };
             }
 
             word_list.forEach((word) => {
-                word = nlp_toolkit.tokenizer(word)[0]
+                word = nlp_toolkit.tokenizer(word)[0];
                 type_promises.push(Helpers.GetSynsetType(word));
             });
 
